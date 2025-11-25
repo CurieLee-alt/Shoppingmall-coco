@@ -100,10 +100,10 @@ public class ReviewController {
     }
 
     // 리뷰 재구매 횟수 조회
-    @GetMapping("/products/{productNo}/countReviews")
+    @GetMapping("/products/{productNo}/countReviews/{reviewNo}")
     public int getReviewsCount(@PathVariable Long productNo,
-        @RequestParam("memberNo") Long memberNo) {
-        int count = reviewService.getBuyCount(productNo, memberNo);
+        @PathVariable Long reviewNo) {
+        int count = reviewService.getBuyCount(productNo, reviewNo);
         return count;
     }
 

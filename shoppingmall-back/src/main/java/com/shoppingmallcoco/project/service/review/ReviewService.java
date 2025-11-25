@@ -203,8 +203,9 @@ public class ReviewService implements IReviewService {
     }
 
     // review 재구매 횟수
-    public int getBuyCount( Long prdNo, Long memNo) {
-        int orderItemCounts = orderItemRepository.countOrderItemsByOrderAndOrderItem(prdNo, memNo);
+    public int getBuyCount( Long prdNo, Long reviewNo) {
+        Long reviewerMemNo= reviewRepository.getMemberNoByReviewNoAndOrderItemOrderNo(reviewNo);
+        int orderItemCounts = orderItemRepository.countOrderItemsByOrderAndOrderItem(prdNo, reviewerMemNo);
         return orderItemCounts;
     }
 
