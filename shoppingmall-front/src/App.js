@@ -72,6 +72,7 @@ function App() {
             <Route path="/my-comate" element={<MyCoMate />} />
             <Route path="/order-detail/:id" element={<OrderDetail />} />
             <Route path="/update-reviews/:reviewNo" element={<UpdateReview />} />
+            <Route path="/write-review/:orderItemNo" element={<Review />} />
             {/* 장바구니 관련 */}
             <Route path="/cart" element={<Cart />} />
             {/* 주문 관련 */}
