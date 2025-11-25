@@ -5,18 +5,26 @@ import '../css/ComateFollowListCard.css';
 import sampleImg_profile from '../images/sampleImg_profile.png'; // 임시 프로필 이미지
 import { follow, unfollow } from '../utils/comate_api';
 
-const ComateFollowListCard = ({ memNo, nickname, skinTypes, isFollowing, loginUserNo, listType, onFollowChange }) => {
+const ComateFollowListCard = ({ 
+    memNo, 
+    nickname,
+    skinTypes, 
+    isFollowing, 
+    loginUserNo, 
+    listType, 
+    onFollowChange 
+}) => {
     const isMine = loginUserNo === memNo; // 로그인 유저(본인) 프로필인 경우 팔로우 버튼 숨김
     const [followingState, setFollowingState] = useState(isFollowing || false);
 
     const handleClick = async () => {
         try {
             if (followingState) {
-                await unfollow(loginUserNo, memNo);
+                await unfollow(memNo);
                 setFollowingState(false);
                 onFollowChange(false);
             } else {
-                await follow(loginUserNo, memNo);
+                await follow(memNo);
                 setFollowingState(true);
                 onFollowChange(true);
             }
@@ -42,10 +50,11 @@ const ComateFollowListCard = ({ memNo, nickname, skinTypes, isFollowing, loginUs
             </div>
             </Link>
             {!isMine && (
-            <button onClick={handleClick}
-            className={`uc_follow_btn ${followingState ? "active" : ""}`}
-            >
-            {followingState ? "팔로잉" : "팔로우"}
+                <button 
+                    onClick={handleClick}
+                    className={`uc_follow_btn ${followingState ? "active" : ""}`}
+                >
+                    {followingState ? "팔로잉" : "팔로우"}
             </button>)}
         </div>
     );   

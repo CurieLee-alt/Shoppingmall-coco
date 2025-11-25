@@ -134,11 +134,11 @@ const Comate = () => {
 
         try {
             if (following) {
-                await unfollow(loginUser.memNo, targetMemNo)
+                await unfollow(targetMemNo)
                 setFollowing(false);
                 setMember(prev => ({...prev, followerCount: Math.max((prev.followerCount || 1) - 1)}));
             } else {
-                await follow(loginUser.memNo, targetMemNo);
+                await follow(targetMemNo);
                 setFollowing(true);
                 setMember(prev => ({...prev,followerCount: (prev.followerCount || 0) + 1}));
             }
@@ -170,11 +170,19 @@ const Comate = () => {
                 followerList={followerList}
                 followingList={followingList}
                 loginUserNo={loginUser?.memNo}
+
+                setFollowerList={setFollowerList}
+                setFollowingList={setFollowingList}
+
                 onListFollowChange={(type, newState) => {
-                // 리스트에서 팔로우/언팔로우 클릭-> Full Profile count 반영
+                    // 리스트에서 팔로우/언팔로우 클릭-> Full Profile count 반영
+                    // targetMember !== loginMember -> count 상태 변경 금지
+                    if (targetMemNo !== loginUser?.memNo) return;
+
                     setMember(prev => {
                         if (!prev) return prev;
                         const updated = {...prev};
+                        
                         if (type === 'follower') {
                             updated.followerCount += newState ? 1 : -1;
                         } else if (type === 'following') {

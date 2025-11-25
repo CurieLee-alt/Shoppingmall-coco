@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
 import ComateReviewCard from './ComateReviewCard';
 import ComateFollowListCard from './ComateFollowListCard';
@@ -10,7 +10,8 @@ const ComateContent = ({
     followerList,
     followingList,
     loginUserNo,
-    onListFollowChange
+    setFollowerList,
+    setFollowingList
 }) => {
 
     let title = null;
@@ -21,6 +22,16 @@ const ComateContent = ({
             : 0;
     
     const [sortOption, setSortOption] = useState('latest');
+
+    const updateListState = (listSetter, index, newState) => {
+        if (typeof listSetter !== 'function') return; // console type error 방지
+
+        listSetter(prev => {
+            const newList = [...prev];
+            newList[index] = {...newList[index], following: newState};
+            return newList;
+        });
+    };
 
     switch(activeTab) {
         case 'review':
@@ -36,26 +47,35 @@ const ComateContent = ({
             break;
         case 'follower':
             title = "팔로워";
-            content = followerList.map((item, index) => <ComateFollowListCard 
-                                                    memNo={item.memNo}
-                                                    nickname={item.nickname}
-                                                    isFollowing={item.following}
-                                                    loginUserNo={loginUserNo}
-                                                    listType="follower"
-                                                    onFollowChange = {(newState) => onListFollowChange('follower', newState)}
-                                                    />);
+            content = followerList.map((item, index) => (
+                <ComateFollowListCard
+                    key={item.memNo}
+                    memNo={item.memNo}
+                    nickname={item.nickname}
+                    skinTypes={item.skinTypes}
+                    isFollowing={item.following}
+                    loginUserNo={loginUserNo}
+                    onFollowChange = {(newState) => 
+                        updateListState(setFollowerList, index, newState)
+                    }
+                />
+            ));
             break;
         case 'following':
             title = "팔로잉";
-            content = followingList.map((item, index) => <ComateFollowListCard
-                                                    key={`following-${item.memNo}-${index}`}
-                                                    memNo={item.memNo}
-                                                    nickname={item.nickname}
-                                                    isFollowing={item.following}
-                                                    loginUserNo={loginUserNo}
-                                                    listType="following"
-                                                    onFollowChange = {(newState) => onListFollowChange('following', newState)}
-                                                    />);
+            content = followingList.map((item, index) => (
+                <ComateFollowListCard
+                    key={item.memNo}
+                    memNo={item.memNo}
+                    nickname={item.nickname}
+                    skinTypes={item.skinTypes}
+                    isFollowing={item.following}
+                    loginUserNo={loginUserNo}
+                    onFollowChange = {(newState) => 
+                        updateListState(setFollowingList, index, newState)
+                    }
+                />
+                ));
             break;
         default:
             content = <div>데이터 없음</div>;
