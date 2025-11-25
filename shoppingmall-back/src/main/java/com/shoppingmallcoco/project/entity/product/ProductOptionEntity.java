@@ -10,27 +10,39 @@ import lombok.Setter;
 @Table(name = "PRODUCTOPTION")
 public class ProductOptionEntity {
 
-    @Id
-    @Column(name = "OPTIONNO")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "productoptiontable_seq_generator")
-    @SequenceGenerator(name="productoptiontable_seq_generator", sequenceName="PRODUCTOPTIONTABLE_SEQ", allocationSize=1)
-    private Long optionNo;
+	@Id
+	@Column(name = "OPTIONNO")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_option_gen")
+	@SequenceGenerator(name = "product_option_gen", sequenceName = "productOption_SEQ", allocationSize = 1)
+	private Long optionNo;
 
-    @Column(name = "OPTIONNAME")
-    private String optionName;
+	@Column(name = "OPTIONNAME")
+	private String optionName;
 
-    @Column(name = "OPTIONVALUE")
-    private String optionValue;
+	@Column(name = "OPTIONVALUE")
+	private String optionValue;
 
-    @Column(name = "STOCK")
-    private int stock;
+	@Column(name = "STOCK")
+	private int stock;
 
-    @Column(name = "ADDPRICE")
-    private int addPrice;
+	@Column(name = "ADDPRICE")
+	private int addPrice;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PRDNO", nullable = false)
-    private ProductEntity product;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "PRDNO", nullable = false)
+	private ProductEntity product;
+
+	public static ProductOptionEntity create(ProductEntity product, String optionName, String optionValue, int addPrice,
+			int stock) {
+		ProductOptionEntity option = new ProductOptionEntity();
+		option.setProduct(product);
+		option.setOptionName(optionName);
+		option.setOptionValue(optionValue);
+		option.setAddPrice(addPrice);
+		option.setStock(stock);
+		return option;
+	}
+
 
     // 재고 차감 (주문 시)
     public void removeStock(int quantity) {

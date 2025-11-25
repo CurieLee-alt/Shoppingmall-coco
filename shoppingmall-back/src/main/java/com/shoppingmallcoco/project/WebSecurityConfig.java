@@ -4,6 +4,7 @@ import com.shoppingmallcoco.project.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -41,6 +42,8 @@ public class WebSecurityConfig {
 					"/api/member/signup",
 					"/api/member/login",
 					"/api/member/kakao/**",
+					"/api/member/naver/**",
+					"/api/member/google/**",
 					"/api/member/check-id/**",
 					"/api/member/check-nickname/**",
 					"/api/member/check-email/**",
@@ -49,8 +52,25 @@ public class WebSecurityConfig {
 					"/api/member/find-password/**",
 					"/api/member/reset-password"
 				).permitAll()
-				// 로그인된 사용자만 접근할 수 있는 API
-				.requestMatchers("/api/member/me", "/api/member/update").authenticated()
+				// 인증 없이 접근 가능한 리뷰 조회 API (GET만 허용)
+				.requestMatchers(HttpMethod.GET, "/api/reviews/*").permitAll()
+				.requestMatchers(HttpMethod.GET, "/api/products/*/reviews").permitAll()
+				.requestMatchers(HttpMethod.GET, "/api/tags").permitAll()
+				// 로그인된 사용자만 접근할 수 있는 리뷰 관련 API
+				.requestMatchers(HttpMethod.POST, "/api/reviews").authenticated()
+				.requestMatchers(HttpMethod.PUT, "/api/reviews/*").authenticated()
+				.requestMatchers(HttpMethod.DELETE, "/api/reviews/*").authenticated()
+				.requestMatchers(HttpMethod.POST, "/api/reviews/*/like").authenticated()
+				// 로그인된 사용자만 접근할 수 있는 회원 관련 API
+				.requestMatchers(
+					"/api/member/me", 
+					"/api/member/update", 
+					"/api/member/change-password", 
+					"/api/member/delete",
+					"/api/mypage"
+				).authenticated()
+				// 관리자만 접근할 수 있는 API
+				.requestMatchers("/api/member/admin/**").authenticated()
 				// 나머지 요청은 모두 허용 (추후 필요 시 제한 추가)
 				.anyRequest().permitAll()
 			)
@@ -66,7 +86,7 @@ public class WebSecurityConfig {
 		CorsConfiguration configuration = new CorsConfiguration();
 		configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
 		// REST API에서 사용하는 HTTP 메서드를 허용
-		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
 		// 필요한 모든 헤더를 허용
 		configuration.setAllowedHeaders(Arrays.asList("*"));
 		// 자격 증명(쿠키, 인증 헤더 등)을 포함한 요청 허용

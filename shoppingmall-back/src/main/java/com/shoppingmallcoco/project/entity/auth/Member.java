@@ -1,19 +1,24 @@
 package com.shoppingmallcoco.project.entity.auth;
 
+import com.shoppingmallcoco.project.entity.mypage.SkinProfile;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
 
 import java.time.LocalDateTime;
 
+import com.shoppingmallcoco.project.dto.auth.MemberSignupDto;
+
 @Entity
 @Getter
-@Setter
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@DynamicInsert
+@DynamicInsert // DB 컬럼의 기본값 적용 가능하도록 필드값이 null인 경우 insert에서 제외
 @Table(name = "member")
 public class Member {
 
@@ -65,6 +70,9 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private Role role = Role.USER;
 
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private SkinProfile skin;
+
     @Column(name = "point")
     private Long point = 0L;
 
@@ -72,16 +80,19 @@ public class Member {
         USER, ADMIN
     }
 
-
-    public void usePoints(Long pointsToUse) {
-        if (this.point < pointsToUse) {
-            throw new RuntimeException("보유 포인트가 부족합니다.");
-        }
-        this.point -= pointsToUse;
-    }
-
-
-    public void returnPoints(Long pointsToReturn) {
-        this.point += pointsToReturn;
+    // DTO를 Entity로 변환하는 메서드
+    public static Member toEntity(MemberSignupDto dto) {
+        return Member.builder()
+                .memId(dto.getMemId())
+                .memPwd(dto.getMemPwd())
+                .memNickname(dto.getMemNickname())
+                .memName(dto.getMemName())
+                .memMail(dto.getMemMail())
+                .memHp(dto.getMemHp())
+                .memZipcode(dto.getMemZipcode())
+                .memAddress1(dto.getMemAddress1())
+                .memAddress2(dto.getMemAddress2())
+                .build();
     }
 }
+
