@@ -5,6 +5,15 @@
   margin-bottom: 20px;
 }
 
+.page-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  padding-bottom: 15px;      /* 글자와 선 사이 간격 */
+  border-bottom: 1px solid #333; /* 하단 검은 줄 */
+  color: #333;
+}
+
 .dash-card {
   flex: 1;
   background: #fff;
@@ -104,20 +113,23 @@
   border-collapse: collapse;
   min-width: 900px;
   font-size: 14px;
+  table-layout: fixed;
 }
 
 .admin-table th {
   background: #f9f9f9;
   padding: 12px;
-  text-align: left;
   border-bottom: 2px solid #eee;
   font-weight: 600;
+  vertical-align: middle;
+  text-align: center;
 }
 
 .admin-table td {
   padding: 12px;
   border-bottom: 1px solid #eee;
   vertical-align: middle;
+  text-align: center;
 }
 
 .product-thumb {
@@ -126,6 +138,8 @@
   object-fit: cover;
   border-radius: 4px;
   border: 1px solid #eee;
+  display: block;
+  margin: 0 auto;
 }
 
 .fw-bold {

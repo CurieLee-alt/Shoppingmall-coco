@@ -23,6 +23,7 @@
   padding: 12px;
   border-bottom: 1px solid #eee;
   vertical-align: middle;
+  text-align: center;
 }
 
 /* 대분류 행 스타일 */
@@ -41,12 +42,13 @@
 }
 
 .category-name-cell {
-  text-align: left;
-  padding-left: 20px;
+  text-align: left !important; 
+  padding-left: 30px;
 }
 
 .category-name-cell.child {
-  padding-left: 50px;
+  padding-left: 60px;
+  color: #555;
 }
 
 /* 관리 버튼 스타일 */
@@ -60,6 +62,9 @@
   border-radius: 4px;
   cursor: pointer;
   font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .action-btn:hover {

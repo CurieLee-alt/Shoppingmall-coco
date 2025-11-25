@@ -84,14 +84,14 @@ function AdminProductList() {
       try {
         await axios.delete(`http://localhost:8080/api/admin/products/${product.prdNo}`);
         toast.success('삭제되었습니다.');
-        
+
         // 새로고침 로직
         if (products.length === 1 && currentPage > 1) {
-            setCurrentPage(prev => prev - 1);
+          setCurrentPage(prev => prev - 1);
         } else {
-            // 빠른 UI 반영을 위해 클라이언트 상태 업데이트
-            setProducts(prev => prev.filter(p => p.prdNo !== product.prdNo));
-            setDashboardCounts(prev => ({...prev, totalProducts: prev.totalProducts - 1}));
+          // 빠른 UI 반영을 위해 클라이언트 상태 업데이트
+          setProducts(prev => prev.filter(p => p.prdNo !== product.prdNo));
+          setDashboardCounts(prev => ({ ...prev, totalProducts: prev.totalProducts - 1 }));
         }
       } catch (error) {
         toast.error("삭제 중 오류가 발생했습니다.");
@@ -101,28 +101,31 @@ function AdminProductList() {
 
   const handleFilterChange = (setter) => (e) => {
     const value = e.target.value;
-    
+
     if (setter === setSearchTerm) {
-        // 입력값은 즉시 UI 반영
-        setSearchTerm(value);
-        
-        // 기존 타이머 취소
-        if (debounceTimer) clearTimeout(debounceTimer);
-        
-        const newTimer = setTimeout(() => {
-            setDebouncedSearchTerm(value);
-            setCurrentPage(1); // 검색 시 1페이지로 이동
-        }, 500);
-        setDebounceTimer(newTimer);
+      // 입력값은 즉시 UI 반영
+      setSearchTerm(value);
+
+      // 기존 타이머 취소
+      if (debounceTimer) clearTimeout(debounceTimer);
+
+      const newTimer = setTimeout(() => {
+        setDebouncedSearchTerm(value);
+        setCurrentPage(1); // 검색 시 1페이지로 이동
+      }, 500);
+      setDebounceTimer(newTimer);
     } else {
-        // 카테고리나 상태 변경은 즉시 적용
-        setter(value);
-        setCurrentPage(1);
+      // 카테고리나 상태 변경은 즉시 적용
+      setter(value);
+      setCurrentPage(1);
     }
   };
-  
+
   return (
-    <>
+    <div className="admin-page-container">
+      {/* 페이지 타이틀과 밑줄 */}
+      <h2 className="page-title">상품 관리</h2>
+
       {/* 대시보드 영역 */}
       <div className="dashboard-container">
         <div className="dash-card">
@@ -154,23 +157,23 @@ function AdminProductList() {
 
         {/* 필터 영역 */}
         <div className="filter-container">
-          <input 
-            type="text" 
+          <input
+            type="text"
             className="search-input"
-            placeholder="상품명 검색..." 
+            placeholder="상품명 검색..."
             value={searchTerm}
             onChange={handleFilterChange(setSearchTerm)}
           />
-          
+
           <select className="filter-select" value={selectedCategory} onChange={handleFilterChange(setSelectedCategory)}>
             <option value="">전체 카테고리</option>
             {categories.filter(c => !c.parentCategoryNo).map(cat => (
-                <React.Fragment key={cat.categoryNo}>
-                    <option value={cat.categoryNo}>{cat.categoryName}</option>
-                    {categories.filter(sub => sub.parentCategoryNo === cat.categoryNo).map(sub => (
-                        <option key={sub.categoryNo} value={sub.categoryNo}>&nbsp;&nbsp;└ {sub.categoryName}</option>
-                    ))}
-                </React.Fragment>
+              <React.Fragment key={cat.categoryNo}>
+                <option value={cat.categoryNo}>{cat.categoryName}</option>
+                {categories.filter(sub => sub.parentCategoryNo === cat.categoryNo).map(sub => (
+                  <option key={sub.categoryNo} value={sub.categoryNo}>&nbsp;&nbsp;└ {sub.categoryName}</option>
+                ))}
+              </React.Fragment>
             ))}
           </select>
 
@@ -195,14 +198,14 @@ function AdminProductList() {
           <table className="admin-table">
             <thead>
               <tr>
-                <th style={{width: '60px'}}>ID</th>
-                <th style={{width: '80px'}}>이미지</th>
+                <th style={{ width: '60px' }}>ID</th>
+                <th style={{ width: '80px' }}>이미지</th>
                 <th>상품명</th>
-                <th style={{width: '120px'}}>카테고리</th>
-                <th style={{width: '100px'}}>가격</th>
-                <th style={{width: '80px'}}>재고</th>
-                <th style={{width: '80px'}}>상태</th>
-                <th style={{width: '120px'}}>관리</th>
+                <th style={{ width: '120px' }}>카테고리</th>
+                <th style={{ width: '100px' }}>가격</th>
+                <th style={{ width: '80px' }}>재고</th>
+                <th style={{ width: '80px' }}>상태</th>
+                <th style={{ width: '120px' }}>관리</th>
               </tr>
             </thead>
             <tbody>
@@ -213,9 +216,9 @@ function AdminProductList() {
                   <tr key={product.prdNo}>
                     <td>{product.prdNo}</td>
                     <td>
-                      <img 
-                        src={product.imageUrl || '/placeholder.png'} 
-                        alt="상품" 
+                      <img
+                        src={product.imageUrl || '/placeholder.png'}
+                        alt="상품"
                         className="product-thumb"
                         onError={(e) => e.target.src = '/placeholder.png'}
                       />
@@ -226,10 +229,9 @@ function AdminProductList() {
                     <td>{product.stock}개</td>
                     <td>
                       {/* 상태값 CSS 클래스로 색상 처리 */}
-                      <span className={`status-tag ${
-                        product.status === '판매중' ? 'status-sale' : 
-                        product.status === '품절' ? 'status-soldout' : 'status-stop'
-                      }`}>
+                      <span className={`status-tag ${product.status === '판매중' ? 'status-sale' :
+                          product.status === '품절' ? 'status-soldout' : 'status-stop'
+                        }`}>
                         {product.status}
                       </span>
                     </td>
@@ -246,13 +248,13 @@ function AdminProductList() {
           </table>
         </div>
 
-        <Pagination 
-          currentPage={currentPage} 
-          totalPages={totalPages} 
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
           onPageChange={(page) => setCurrentPage(page)}
         />
       </div>
-    </>
+    </div>
   );
 }
 
