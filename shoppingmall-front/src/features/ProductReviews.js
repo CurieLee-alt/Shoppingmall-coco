@@ -59,6 +59,7 @@ function ProductReviews({ productNo }) {
                     key={review.reviewNo}
                     reviewData={review}
                     onDelete={handleDeleteReview}
+                    productNo={productNo}
                 />
             ))}
         </div>
