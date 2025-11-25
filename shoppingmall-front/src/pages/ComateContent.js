@@ -15,6 +15,7 @@ const ComateContent = ({
     setLikeList,
     setFollowerList,
     setFollowingList,
+    onListFollowChange,
     targetMemNo
 }) => {
 
@@ -78,9 +79,12 @@ const ComateContent = ({
                     skinTypes={item.skinTypes}
                     isFollowing={item.following}
                     loginUserNo={loginUserNo}
-                    onFollowChange = {(newState) => 
-                        updateListState(setFollowerList, index, newState)
-                    }
+                    listType="follower"
+                    onFollowChange = {(newState) => {
+                        updateListState(setFollowerList, index, newState);
+                        if (typeof onListFollowChange === "function")
+                            onListFollowChange("following", newState);
+                    }}
                 />
             ));
             break;
@@ -94,9 +98,12 @@ const ComateContent = ({
                     skinTypes={item.skinTypes}
                     isFollowing={item.following}
                     loginUserNo={loginUserNo}
-                    onFollowChange = {(newState) => 
-                        updateListState(setFollowingList, index, newState)
-                    }
+                    listType="following"
+                    onFollowChange = {(newState) => {
+                        updateListState(setFollowingList, index, newState);
+                        if (typeof onListFollowChange === "function")
+                            onListFollowChange("following", newState);
+                    }}
                 />
                 ));
             break;
