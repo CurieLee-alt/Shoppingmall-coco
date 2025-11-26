@@ -8,7 +8,7 @@ import yellowStar from '../images/yellowStar.svg'
 import detailIcon from '../images/detailIcon.svg'
 import love from '../images/love.png'
 import '../css/ReviewDetail.css'
-import { isLoggedIn, getStoredMember, storage, STORAGE_KEYS, getStoredMemberId } from '../utils/api'
+import { isLoggedIn, getStoredMember, storage, STORAGE_KEYS } from '../utils/api'
 import axios from 'axios'
 function ReviewDetail({ reviewData, onDelete, productNo }) {
     const navigate = useNavigate();
@@ -88,7 +88,7 @@ function ReviewDetail({ reviewData, onDelete, productNo }) {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 }
-            });
+            });         
             if (response.ok) {
                 const updatedLikeCount = await response.json();
                 setlike(updatedLikeCount);
@@ -104,9 +104,8 @@ function ReviewDetail({ reviewData, onDelete, productNo }) {
 
     useEffect(() => {
         const getBuyCount = async () => {
-            const memberNo = await getStoredMemberId();
             try {
-                const response = await axios.get(`http://localhost:8080/api/products/${productNo}/countReviews?memberNo=${memberNo}`);
+                const response = await axios.get(`http://localhost:8080/api/products/${productNo}/countReviews/${reviewNo}`);
                 setBuyCount(response.data);
             } catch (error) {
                 console.log("재구매 횟수 불러오기 실패", error);
