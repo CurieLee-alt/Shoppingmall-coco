@@ -8,8 +8,11 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.data.domain.Pageable;
 import java.time.LocalDate;
 import java.util.*;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
-public interface OrderRepository extends JpaRepository<Order, Long>{
+public interface OrderRepository extends JpaRepository<Order, Long> {
+
     List<Order> findAllByMemberMemNoOrderByOrderNoDesc(Long memNo);
 
     // 전체 조회
