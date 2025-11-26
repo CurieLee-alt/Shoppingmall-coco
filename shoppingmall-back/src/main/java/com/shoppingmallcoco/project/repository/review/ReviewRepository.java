@@ -3,6 +3,8 @@ package com.shoppingmallcoco.project.repository.review;
 import com.shoppingmallcoco.project.entity.review.Review;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
@@ -14,6 +16,14 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     // review 모든 목록 조회 (하나의 상품에 등록된 리뷰 목록 조회)
     List<Review> findByOrderItemProductPrdNo(Long prdNo);
+
+    //
+    @Query("SELECT m.memNo FROM Review r "
+        + "JOIN r.orderItem oi "
+        + "JOIN oi.order o "
+        + "JOIN o.member m "
+        + "WHERE r.reviewNo = :reviewNo ")
+    Long getMemberNoByReviewNoAndOrderItemOrderNo(@Param("reviewNo") Long reviewNo);
 
     // review 삭제
     //void deleteById(Long reviewNo);
