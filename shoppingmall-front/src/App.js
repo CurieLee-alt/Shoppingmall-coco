@@ -70,7 +70,7 @@ function App() {
             <Route path="/my-activity" element={<MyActivity />} />
             <Route path="/account-settings" element={<AccountSettings />} />
             <Route path="/my-comate" element={<MyCoMate />} />
-            <Route path="/order-detail/:id" element={<OrderDetail />} />
+            <Route path="/order-detail/:orderNo" element={<OrderDetail />} />
             <Route path="/update-reviews/:reviewNo" element={<UpdateReview />} />
             <Route path="/write-review/:orderItemNo" element={<Review />} />
             {/* 장바구니 관련 */}

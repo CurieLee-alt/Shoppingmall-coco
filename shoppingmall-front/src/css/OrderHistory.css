@@ -95,6 +95,12 @@
   color: #333;
 }
 
+.order-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 /* 구분선 */
 .divider {
   margin: 18px 0;
@@ -142,15 +148,18 @@
 
 /* 리뷰쓰기 버튼 (각 상품별) */
 .review-btn {
-  margin-top: 6px;
-  padding: 5px 10px;
-  background: white;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 24px;
+  font-size: 14px;
+  font-weight: 600;
   border: 1px solid #222;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 13px;
+  background-color: #fff;
   color: #222;
-  transition: 0.2s ease;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.25s ease-in-out;
 }
 
 .review-btn:hover {

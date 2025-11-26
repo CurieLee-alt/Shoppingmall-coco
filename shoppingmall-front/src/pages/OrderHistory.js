@@ -2,20 +2,16 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../css/OrderHistory.css";
 import axios from "axios";
-import { getStoredMember } from "../utils/api";
 
 function OrderHistory() {
   const navigate = useNavigate();
-  const member = getStoredMember();
-  const memNo = member?.memNo;
 
   const [orders, setOrders] = useState([]);
-  const [page, setPage] = useState(0);                 // 현재 페이지
-  const [totalPages, setTotalPages] = useState(1);     // 총 페이지 개수
-  const [period, setPeriod] = useState("all");         // 기간 필터
-  const [loading, setLoading] = useState(true);        // 로딩 상태
+  const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
+  const [period, setPeriod] = useState("all");
+  const [loading, setLoading] = useState(true);
 
-  // 주문 상태 매핑 (한글 유지)
   const statusMap = {
     배송완료: "배송완료",
     배송중: "배송중",
@@ -23,19 +19,24 @@ function OrderHistory() {
     취소됨: "취소됨",
   };
 
-  // 주문 목록 API 호출
   useEffect(() => {
-    if (!memNo) return;
+    const token = localStorage.getItem("token");
+    if (!token) return;
 
     setLoading(true);
 
     axios
       .get(
-        `http://localhost:8080/api/coco/members/orders/${memNo}?page=${page}&size=10&period=${period}`
+        `http://localhost:8080/api/coco/orders?page=${page}&size=10&period=${period}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
       )
       .then((res) => {
-        setOrders(res.data.content);       // 주문 리스트
-        setTotalPages(res.data.totalPages); // 총 페이지 수
+        setOrders(res.data.content);
+        setTotalPages(res.data.totalPages);
       })
       .catch((err) => {
         console.error("주문 내역 조회 실패:", err);
@@ -43,7 +44,7 @@ function OrderHistory() {
       .finally(() => {
         setLoading(false);
       });
-  }, [memNo, page, period]);
+  }, [page, period]);
 
   return (
     <div className="order-history-container">
@@ -153,7 +154,8 @@ function OrderHistory() {
                   <p className="item-detail">
                     {item.price.toLocaleString()}원 × {item.qty}개
                   </p>
-
+                </div>
+                
                   {/*개별 리뷰쓰기 버튼 */}
                   {order.status === "배송완료" && (
                     <button
@@ -163,7 +165,7 @@ function OrderHistory() {
                       리뷰쓰기 ✎
                     </button>
                   )}
-                </div>
+                
               </div>
               ))}
             </div>
