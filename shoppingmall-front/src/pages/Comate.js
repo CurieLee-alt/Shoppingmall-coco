@@ -178,6 +178,22 @@ const Comate = () => {
 
                 targetMemNo={targetMemNo}
                 
+                onLikeChange={(liked) => {
+                    // 다른 사람의 프로필인 경우 좋아요 상태변화 개수 반영하지 않음
+                    if (targetMemNo !== loginUser?.memNo) return;
+
+                    setMember(prev => {
+                        if (!prev) return prev;
+                        return {
+                            ...prev,
+                            likedCount: liked 
+                                        ? (prev.likedCount || 0) + 1
+                                        : Math.max((prev.likedCount || 1 ) -1)   
+                        }
+                    });
+                }}
+                
+
                 onListFollowChange={(type, newState) => {
                     // 리스트에서 팔로우/언팔로우 클릭-> Full Profile count 반영
                     // targetMember !== loginMember -> count 상태 변경 금지

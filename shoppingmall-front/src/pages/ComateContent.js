@@ -16,6 +16,7 @@ const ComateContent = ({
     setFollowerList,
     setFollowingList,
     onListFollowChange,
+    onLikeChange,
     targetMemNo
 }) => {
 
@@ -61,7 +62,17 @@ const ComateContent = ({
             title = "누적 리뷰";
             content = reviewList.map((item, index) => <ComateReviewCard 
                                                         key={`review-${item.id}-${index}`}
-                                                        {...item} />);
+                                                        {...item}
+                                                        onToggleLike={async (reviewNo, likedByCurrentUser) => {
+                                                            setReviewList(prev => prev.map(r =>
+                                                            r.reviewNo === reviewNo ? {
+                                                                ...r, 
+                                                                likedByCurrentUser: !likedByCurrentUser,
+                                                                likeCount: likedByCurrentUser ? r.likeCount - 1 : r.likeCount + 1
+                                                                } : r
+                                                            ));
+                                                            if (typeof onLikeChange === 'function') onLikeChange(!likedByCurrentUser);
+                                                        }} />);
             break;
         case 'like':
             title = "좋아요";
@@ -74,6 +85,8 @@ const ComateContent = ({
                                                             if (likedByCurrentUser) {
                                                                 setLikeList(prev => prev.filter(r => r.reviewNo !== reviewNo));
                                                             } 
+
+                                                            if (typeof onLikeChange === 'function') onLikeChange(!likedByCurrentUser);
                                                         }}
                                                         />);
             break;
