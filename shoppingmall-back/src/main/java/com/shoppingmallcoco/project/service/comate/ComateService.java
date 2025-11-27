@@ -54,7 +54,7 @@ public class ComateService {
     }
     
     // 메인용 - 전체 회원 목록 조회
-    public List<MiniProfileDTO> getAllComates() {
+    public List<MiniProfileDTO> getAllComates(Long currentMemNo) {
     	List<Member> members = memberRepository.findAll();
     	return members.stream().map(member -> {
     		
@@ -65,12 +65,17 @@ public class ComateService {
     		// MiniProfileDTO skinTypes 주석 지워야함
     		// List<String> skinTypes = member.getSkinTypes();
     		
+    		boolean isFollowing = currentMemNo != null &&
+    							followRepository.existsByFollowerMemNoAndFollowingMemNo(currentMemNo, member.getMemNo());
+    		
+    		
     		return MiniProfileDTO.builder()
     				.memNo(member.getMemNo())
     				.memNickname(member.getMemNickname())
     				//.skinTypes(skinTypes)
     				.followerCount(followerCount)
     				.reviewCount(reviewCount)
+    				.isFollowing(isFollowing)
     				.build();
     	}).toList();
     }

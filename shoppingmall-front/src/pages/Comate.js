@@ -137,7 +137,7 @@ const Comate = () => {
         if (tab && tab !== activeTab) setActiveTab(tab);
         window.scrollTo({
             top: 0,
-            behavior: 'smooth', // 부드럽게 올라감, 바로 올리고 싶으면 'auto'
+            behavior: 'smooth'
         });
     }, [tab]);
 
