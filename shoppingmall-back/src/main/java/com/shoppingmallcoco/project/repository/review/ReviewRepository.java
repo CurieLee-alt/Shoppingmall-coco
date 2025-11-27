@@ -1,7 +1,10 @@
 package com.shoppingmallcoco.project.repository.review;
 
+import com.shoppingmallcoco.project.dto.review.ReviewDTO;
 import com.shoppingmallcoco.project.entity.review.Review;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -46,10 +49,11 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
         "JOIN o.member m " +
         "JOIN m.skin s " +
         "WHERE oi.product.prdNo = :prdNo " +
-        "AND s.skinType = :skinType " +
-        "ORDER BY r.createdAt DESC")
-    List<Review> findReviewsByProductAndSkinType(@Param("prdNo") Long prdNo,
-        @Param("skinType") String skinType);
+        "AND s.skinType = :skinType ")
+    Page<Review> findPageByProductAndSkinType(@Param("prdNo") Long prdNo,
+        @Param("skinType") String skinType, Pageable pageable);
+
+    Page<Review> findByOrderItemProductPrdNo(Long prdNo, Pageable pageable);
     
 	/* CO-MATE 기능 구현 */
     /* 특정 사용자가 작성한 리뷰 개수 */

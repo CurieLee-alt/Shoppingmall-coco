@@ -25,8 +25,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -323,19 +325,35 @@ public class ReviewService implements IReviewService {
         return likeRepository.countByReview(review);
     }
 
-    // co-mate 필터 기능
-    public List<ReviewDTO> getCoMateReviews(Long prdNo, Long currentMemberNo) {
-        SkinProfile skin = skinRepository.findByMember_MemNo(currentMemberNo)
-            .orElseThrow(() -> new IllegalArgumentException("피부 타입 설정이 되지 않았습니다."));
+    // Review 페이징
+    @Transactional(readOnly = true)
+    public Page<ReviewDTO> getReviewPage(Long productNo, Long memNo, int page, int size,
+        String filterType) {
+        Sort sort = switch (filterType) {
+            case "oldest" -> Sort.by(Sort.Direction.ASC, "createdAt");
+            default -> Sort.by(Sort.Direction.DESC, "createdAt");
+        };
 
-        String skinType = skin.getSkinType();
-        List<Review> reviews = reviewRepository.findReviewsByProductAndSkinType(prdNo, skinType);
+        Pageable pageable = PageRequest.of(page, size, sort);
 
-        return reviews.stream().map(review -> {
+        Page<Review> reviewPage;
+
+        if ("co-mate".equals(filterType)) {
+            SkinProfile skin = skinRepository.findByMember_MemNo(memNo)
+                .orElseThrow(() -> new IllegalArgumentException("피부 타입 설정이 되지 않았습니다."));
+
+            String skinType = skin.getSkinType();
+
+            reviewPage = reviewRepository.findPageByProductAndSkinType(productNo, skinType,
+                pageable);
+        } else {
+            reviewPage = reviewRepository.findByOrderItemProductPrdNo(productNo, pageable);
+        }
+
+        return reviewPage.map(review -> {
             int likeCount = likeRepository.countByReview_ReviewNo(review.getReviewNo());
             return ReviewDTO.toDto(review, likeCount);
-        }).toList();
+        });
     }
-
 
 }
