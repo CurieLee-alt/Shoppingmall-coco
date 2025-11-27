@@ -43,7 +43,6 @@ function App() {
   const hideHeaderFooter = ['/login', '/login/naver/callback', '/signup/terms', '/signup/info', '/find-account', '/kakao/additional-info'].includes(location.pathname) 
     || location.pathname.startsWith('/admin');
 
-
   return (
     <ThemeProvider theme={theme}>
     <OrderProvider>
@@ -106,6 +105,5 @@ function App() {
     </ThemeProvider>
   ); 
 }   
-
 
 export default App;
