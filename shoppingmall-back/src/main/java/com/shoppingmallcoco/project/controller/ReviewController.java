@@ -12,6 +12,7 @@ import com.shoppingmallcoco.project.service.review.TagService;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -113,21 +114,16 @@ public class ReviewController {
         return tagDTOList;
     }
 
-    //orderItemNo 유뮤 확인
-    @GetMapping("/orderItems/{orderItemNo}/check")
-    public ResponseEntity<?> checkOrderItems(@PathVariable Long orderItemNo) {
-        boolean exists = orderItemRepository.existsById(orderItemNo);
-        if (exists) {
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
     // 리뷰 작성 버튼 누를 때 orderItemNo 가져오기
-    @GetMapping("/reviews/{prdNo}/getOrderItemNo/{memNo}")
-    public Long getOrderItemNo(@PathVariable Long prdNo, @PathVariable Long memNo) {
-        Long orderItemNo = reviewService.getOrderItemNo(prdNo, memNo);
+    @GetMapping("/reviews/{prdNo}/getOrderItemNo")
+    public Long getOrderItemNo(@PathVariable Long prdNo, Authentication authentication) {
+        if (authentication == null || authentication.getName() == null) {
+            throw new RuntimeException("인증이 필요합니다.");
+        }
+        Member member = memberRepository.findByMemId(authentication.getName())
+            .orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다."));
+
+        Long orderItemNo = reviewService.getOrderItemNo(prdNo, member.getMemNo());
         return orderItemNo;
     }
 
@@ -152,5 +148,39 @@ public class ReviewController {
             .orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다."));
         return reviewService.toggleLike(reviewNo, member.getMemNo());
     }
+
+    @GetMapping("/products/{prdNo}/reviewPages")
+    public Page<ReviewDTO> getReviewPages(@PathVariable("prdNo") Long prdNo,
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int size,
+        @RequestParam(defaultValue = "latest") String filterType,
+        Authentication authentication) {
+
+        Long memNo = null;
+        if ("co-mate".equals(filterType)) {
+            if (authentication == null || authentication.getName() == null) {
+                throw new RuntimeException("Co-mate는 로그인이 필요합니다.");
+            }
+            Member member = memberRepository.findByMemId(authentication.getName())
+                .orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다."));
+            memNo = member.getMemNo();
+        }
+        return reviewService.getReviewPage(prdNo, memNo, page, size, filterType);
+    }
+
+//    // 리뷰 co-mate 필터
+//    @GetMapping("/products/{prdNo}/reviews/comate")
+//    public List<ReviewDTO> getProductReviews(@PathVariable Long prdNo,
+//        Authentication authentication) {
+//        if (authentication == null || authentication.getName() == null) {
+//            throw new RuntimeException("인증이 필요합니다.");
+//        }
+//
+//        Member member = memberRepository.findByMemId(authentication.getName())
+//            .orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다."));
+//
+//        Long memNo = member.getMemNo();
+//        return reviewService.getCoMateReviews(prdNo, memNo);
+//    }
 
 }
