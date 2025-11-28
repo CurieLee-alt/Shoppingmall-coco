@@ -123,8 +123,6 @@ const Comate = () => {
         const fetchSearch = async () => {
             try {
                 const result = await searchMembers(debouncedNickname, {signal: controller.signal});
-                
-                console.log("[SearchMembers] 결과: ", result);
                 setSearchResult(result);
                 SetShowDropdown(true);
             } catch (error) {
@@ -169,9 +167,7 @@ const Comate = () => {
             try {
                 switch (activeTab) {
                     case 'review' :
-                        const review = await getReviewList(targetMemNo, {signal: controller.signal});
-                        setReviewList(review);
-                        console.log(`[Review] 요청 완료 targetMemNo=${targetMemNo}`, review);
+                        setReviewList(await getReviewList(targetMemNo, {signal: controller.signal}));
                         break;
                     case 'like' :
                         setLikeList(await getLikedList(targetMemNo));

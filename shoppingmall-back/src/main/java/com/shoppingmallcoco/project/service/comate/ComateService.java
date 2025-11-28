@@ -35,16 +35,15 @@ public class ComateService {
     			.orElseThrow(() -> new RuntimeException("존재하지 않는 회원입니다."));
     	
     	SkinProfile skinProfile = skinRepository.findByMember_MemNo(targetMemNo).orElse(null);
-    	
     	List<String> skinTags = new ArrayList<>();
-    	if (skinProfile != null && skinProfile.getSkinConcern() != null) {
-    		List<String> concern = Arrays.stream(skinProfile.getSkinConcern().split(","))
-    									.map(String::trim)
-    									.collect(Collectors.toList());
-    		
-    		skinTags.add(skinProfile.getSkinType());
-    		skinTags.addAll(concern);
-    		skinTags.add(skinProfile.getPersonalColor());
+    	if (skinProfile != null) {
+    		if (skinProfile.getSkinType() != null) skinTags.add(skinProfile.getSkinType());
+    		if (skinProfile.getSkinConcern() != null) {
+       			skinTags.addAll(Arrays.stream(skinProfile.getSkinConcern().split(","))
+       					.map(String::trim)
+       					.collect(Collectors.toList()));
+       		}
+    		if (skinProfile.getPersonalColor() != null) skinTags.add(skinProfile.getPersonalColor());
     	}
     	
     	boolean isMine = currentMemNo != null && currentMemNo.equals(targetMemNo);
@@ -78,16 +77,16 @@ public class ComateService {
     		int reviewCount = reviewRepository.countByOrderItem_Order_Member_MemNo(member.getMemNo());
     		
     		SkinProfile skinProfile = skinRepository.findByMember_MemNo(member.getMemNo()).orElse(null);
-    		List<String> skinTags = new ArrayList<>();
-    		if (skinProfile != null && skinProfile.getSkinConcern() != null) {
-    			List<String> concern = Arrays.stream(skinProfile.getSkinConcern().split(","))
-										.map(String::trim)
-										.collect(Collectors.toList());
-				
-				skinTags.add(skinProfile.getSkinType());
-				skinTags.addAll(concern);
-				skinTags.add(skinProfile.getPersonalColor());
-    		}
+        	List<String> skinTags = new ArrayList<>();
+        	if (skinProfile != null) {
+        		if (skinProfile.getSkinType() != null) skinTags.add(skinProfile.getSkinType());
+        		if (skinProfile.getSkinConcern() != null) {
+           			skinTags.addAll(Arrays.stream(skinProfile.getSkinConcern().split(","))
+           					.map(String::trim)
+           					.collect(Collectors.toList()));
+           		}
+        		if (skinProfile.getPersonalColor() != null) skinTags.add(skinProfile.getPersonalColor());
+        	}
     		
     		boolean isFollowing = currentMemNo != null &&
     							followRepository.existsByFollowerMemNoAndFollowingMemNo(currentMemNo, member.getMemNo());
