@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "../css/Cart.css";
-import OrderSteps from "../components/OrderSteps.js";
-import { getStoredMember } from "../utils/api";
 import { useNavigate } from "react-router-dom";
 
 function Cart() {
@@ -59,18 +57,6 @@ function Cart() {
   const selectedTotalPrice = cartItems
     .filter((item) => selectedItems.includes(item.cartNo))
     .reduce((total, item) => total + item.productPrice * item.cartQty, 0);
-
-  // 총 상품 금액 계산
-  const totalPrice = cartItems.reduce(
-    (total, item) => total + item.productPrice * item.cartQty,
-    0
-  );
-
-  // 배송비 계산 (3만원 미만 = 3000원 / 이상 = 무료)
-  const shippingFee = selectedTotalPrice >= 30000 ? 0 : 3000;
-
-  // 총 구매 금액 (상품 금액 + 배송비)
-  const finalTotalPrice = selectedTotalPrice + shippingFee;
 
   // 수량 변경
   const updateQuantity = (cartNo, newQty) => {
@@ -176,7 +162,7 @@ function Cart() {
 
   return (
     <div className="order-page">
-      <h2 className="order-title">주문하기</h2>
+     <h1 className="order-title">장바구니</h1>
 
       <div className="order-content-area">
         {/*<OrderSteps currentStep={1} />*/}
@@ -270,7 +256,7 @@ function Cart() {
 
           {/* 주문 요약 */}
           <div className="order-summary">
-            <h3>구매 금액</h3>
+            <h3>결제 금액</h3>
 
             {/* 선택된 상품 금액 */}
             <div className="summary-row">
