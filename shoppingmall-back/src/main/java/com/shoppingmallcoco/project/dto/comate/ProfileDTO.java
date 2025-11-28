@@ -30,5 +30,7 @@ public class ProfileDTO {
 
     // 현재 사용자 확인
     private boolean isMine;
+    // 매칭률
+    private Integer matchingRate;
 
 }

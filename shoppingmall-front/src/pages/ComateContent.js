@@ -103,6 +103,7 @@ const ComateContent = ({
                     nickname={item.nickname}
                     skinTags={item.skinTags}
                     isFollowing={item.following}
+                    matchingRate={item.matchingRate}
                     loginUserNo={loginUserNo}
                     onFollowChange = {(newState) => {
                         updateListState(setFollowerList, index, newState);
@@ -122,6 +123,7 @@ const ComateContent = ({
                     nickname={item.nickname}
                     skinTags={item.skinTags}
                     isFollowing={item.following}
+                    matchingRate={item.matchingRate}
                     loginUserNo={loginUserNo}
                     onFollowChange = {(newState) => {
                         updateListState(setFollowingList, index, newState);

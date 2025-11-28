@@ -136,6 +136,7 @@ function Home_Comate() {
                             followers={comate.followerCount}
                             reviews={comate.reviewCount}
                             isFollowing={followStatus[comate.memNo] || false}
+                            matchingRate={comate.matchingRate}
                             onClick={() => handleCardClick(comate.memNo)}
                             onFollowClick={() => handleFollowClick(comate)}
                         />

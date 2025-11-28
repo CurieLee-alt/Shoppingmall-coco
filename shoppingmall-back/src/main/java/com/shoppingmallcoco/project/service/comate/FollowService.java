@@ -25,6 +25,8 @@ public class FollowService {
     private final MemberRepository memberRepository;
     private final FollowRepository followRepository;
     private final SkinRepository skinRepository;
+    
+    private final MatchingService matchingService;
 
     /* 팔로워 목록 조회 */
     public List<FollowInfoDTO> getFollowers(Long targetMemNo, Long currentMemNo) {
@@ -49,6 +51,12 @@ public class FollowService {
         	boolean isFollowing = followRepository
         			.existsByFollowerMemNoAndFollowingMemNo(currentMemNo, item.getMemNo());
      	   	item.setFollowing(isFollowing);
+     	   	
+     	   	// 매칭률
+       		int matchRate = (currentMemNo != null)
+       				? matchingService.getUserMatch(currentMemNo, item.getMemNo())
+       				: -1;
+       		item.setMatchingRate(matchRate);
         });
         
         return list;
@@ -73,10 +81,16 @@ public class FollowService {
 	       	}
 	       	item.setSkinTags(skinTags);
        	
-       		// isFollowing 체크
+       		// isFollowing
        		boolean isFollowing = followRepository
        				.existsByFollowerMemNoAndFollowingMemNo(currentMemNo, item.getMemNo());
        		item.setFollowing(isFollowing);
+       		
+       		// 매칭률
+       		int matchRate = (currentMemNo != null)
+       				? matchingService.getUserMatch(currentMemNo, item.getMemNo())
+       				: -1;
+       		item.setMatchingRate(matchRate);
        });
        
        return list;

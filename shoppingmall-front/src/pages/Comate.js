@@ -289,6 +289,7 @@ const Comate = () => {
                     onTabClick={handleTabClick}
                     isMine = {isMine}
                     isFollowing={following}
+                    matchingRate={member.matchingRate}
                 />
                 <ComateContent 
                     activeTab={activeTab}

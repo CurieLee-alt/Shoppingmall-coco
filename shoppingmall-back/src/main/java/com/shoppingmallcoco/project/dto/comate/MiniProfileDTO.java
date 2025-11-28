@@ -16,5 +16,6 @@ public class MiniProfileDTO {
 	private int reviewCount;
 	
 	private boolean isFollowing;
+	private Integer matchingRate;
 	
 }

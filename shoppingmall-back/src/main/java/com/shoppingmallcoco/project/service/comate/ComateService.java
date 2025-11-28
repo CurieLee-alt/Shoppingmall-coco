@@ -27,6 +27,8 @@ public class ComateService {
     private final ReviewRepository reviewRepository;
     private final LikeRepository likeRepository;
     private final SkinRepository skinRepository;
+    
+    private final MatchingService matchingService;
 
     // 프로필 기본 정보 조회
     public ProfileDTO getProfile(Long currentMemNo, Long targetMemNo) {
@@ -55,6 +57,11 @@ public class ComateService {
         boolean isFollowing = currentMemNo != null && 
         						followRepository.existsByFollowerMemNoAndFollowingMemNo(currentMemNo, targetMemNo);
         
+        // 매칭률
+   		int matchRate = (currentMemNo != null)
+   				? matchingService.getUserMatch(currentMemNo, targetMemNo)
+   				: -1;
+        
         return ProfileDTO.builder()
                 .memNo(member.getMemNo())
                 .memName(member.getMemName())
@@ -65,6 +72,7 @@ public class ComateService {
                 .followingCount(followingCount)
                 .isFollowing(isFollowing)
                 .isMine(isMine)
+                .matchingRate(matchRate)
                 .build();
     }
     
@@ -91,6 +99,9 @@ public class ComateService {
     		boolean isFollowing = currentMemNo != null &&
     							followRepository.existsByFollowerMemNoAndFollowingMemNo(currentMemNo, member.getMemNo());
     		
+    		int matchRate = (currentMemNo != null)
+       				? matchingService.getUserMatch(currentMemNo, member.getMemNo())
+       				: -1;
     		
     		return MiniProfileDTO.builder()
     				.memNo(member.getMemNo())
@@ -99,6 +110,7 @@ public class ComateService {
     				.followerCount(followerCount)
     				.reviewCount(reviewCount)
     				.isFollowing(isFollowing)
+    				.matchingRate(matchRate)
     				.build();
     	}).toList();
     }

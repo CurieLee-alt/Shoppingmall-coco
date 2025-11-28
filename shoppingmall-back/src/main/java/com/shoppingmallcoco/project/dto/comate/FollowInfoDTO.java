@@ -17,6 +17,8 @@ public class FollowInfoDTO {
     private List<String> skinTags;
     private boolean isFollowing;
     
+    private Integer matchingRate;
+    
     public FollowInfoDTO(Long memNo, String nickname) {
         this.memNo = memNo;
         this.nickname = nickname;
