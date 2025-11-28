@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
 import '../css/Comate.css';
+import sampleImg_profile from '../images/sampleImg_profile.png';
 
 import ComateFullProfile from './ComateFullProfile';
 import ComateContent from './ComateContent';
@@ -12,9 +13,11 @@ import {
     getFollowerList,
     getFollowingList,
     follow,
-    unfollow
+    unfollow,
+    searchMembers
 } from '../utils/comate_api';
 import { getCurrentMember } from '../utils/api';
+import useDebounde from '../hooks/useDebounce';
 
 const Comate = () => {
     const navigate = useNavigate();
@@ -33,6 +36,11 @@ const Comate = () => {
     const [likeList, setLikeList] = useState([]);
     const [followerList, setFollowerList] = useState([]);
     const [followingList, setFollowingList] = useState([]);
+
+    const [nickname, setNickname] = useState("");
+    const debouncedNickname = useDebounde(nickname, 400);
+    const [searchResult, setSearchResult] = useState([]);
+    const [showDropdown, SetShowDropdown] = useState(false);
 
     const isMine = userType === 'me';
 
@@ -88,6 +96,67 @@ const Comate = () => {
 
         loadProfile();
     }, [targetMemNo]);
+
+    /* 사용자 검색 */
+    /*
+    const handleSearch = async (e) => {
+        e.preventDefault();
+        if (!nickname.trim()) return;
+
+        try {
+            const result = await searchMembers(nickname);
+            console.log("[SearchMembers] 결과: ", result);
+        } catch (error) {
+            console.log("[SearchMembers] 실패: ", error);
+        }
+    };
+    */
+    // 입력값 변화 감지 검색
+    /* 디바운스 API 호출 + AbortController 중복요청 취소 */
+    useEffect(() => {
+        if (!debouncedNickname.trim()) {
+            setSearchResult([]);
+            return;
+        }  
+
+        const controller = new AbortController();
+        const fetchSearch = async () => {
+            try {
+                const result = await searchMembers(debouncedNickname, {signal: controller.signal});
+                
+                console.log("[SearchMembers] 결과: ", result);
+                setSearchResult(result);
+                SetShowDropdown(true);
+            } catch (error) {
+                if (error.name === "AbortError") {
+                    console.log("검색 요청 취소");
+                } else {
+                    console.log("검색 오류: ", error);
+                }
+            }
+        };
+        
+        fetchSearch();
+        return () => controller.abort();
+    }, [debouncedNickname]);
+
+    const handleSelectMember = (memNo) => {
+        setNickname("");
+        setSearchResult([]);
+        SetShowDropdown(false);
+        navigate(`/comate/user/${memNo}/review`);
+    };
+
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (!e.target.closest(".search_container")) {
+                SetShowDropdown(false);
+            }
+        };
+
+        document.addEventListener("click", handleClickOutside);
+        return () => document.removeEventListener("click", handleClickOutside);
+    }, []);
 
     /* 탭별 데이터 조회 */
     /* React 18 strict mode - AbortController  */
@@ -182,15 +251,35 @@ const Comate = () => {
     return (
         <div className="comate_wrapper">
             <div className="comate_top">
-                <div className="search_container">
-                    <form>
-                        <input type="text" name="search" placeholder="당신의 CO-MATE 를 찾아보세요!" />
+                <div className="comate_search_container">
+                    <form onSubmit={(e) => e.preventDefault()}>
+                        <input 
+                            type="text" name="search" 
+                            value={nickname} placeholder="당신의 CO-MATE 를 찾아보세요!"
+                            onChange={(e) => setNickname(e.target.value)} />
                         <button type="submit" className="btn_search">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="" viewBox="0 0 24 24" width="20" height="20">
                                 <path fill="#777777" fillRule="evenodd" d="M15.571 16.631a8.275 8.275 0 1 1 1.06-1.06l4.5 4.498-1.061 1.06-4.499-4.498Zm1.478-6.357a6.775 6.775 0 1 1-13.55 0 6.775 6.775 0 0 1 13.55 0Z" clipRule="evenodd"></path>
                             </svg>
                         </button>
                     </form>
+                    <div className="search_dropdown">
+                        {showDropdown && searchResult.length > 0 && (
+                            <ul>
+                                {searchResult.map(user => (
+                                    <li key={user.memNo}
+                                        onClick={() => handleSelectMember(user.memNo)}
+                                    >
+                                        <img src={sampleImg_profile} className="search_result_profile"></img>
+                                        <span>{user.memNickname}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                        {showDropdown && searchResult.length === 0 && debouncedNickname.trim() !== "" && (
+                            <div className="no_result">등록되지 않은 CO-MATE 입니다. </div>   
+                        )}
+                    </div>
                 </div>
             </div>
             <div className="comate_main">
