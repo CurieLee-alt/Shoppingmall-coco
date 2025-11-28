@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import '../css/ComateFollowListCard.css';
 import sampleImg_profile from '../images/sampleImg_profile.png'; // 임시 프로필 이미지
@@ -11,13 +11,10 @@ const ComateFollowListCard = ({
     skinTypes, 
     isFollowing, 
     loginUserNo, 
-    listType, 
     onFollowChange 
 }) => {
     const isMine = loginUserNo === memNo; // 로그인 유저(본인) 프로필인 경우 팔로우 버튼 숨김
     const [followingState, setFollowingState] = useState(isFollowing || false);
-
-    const navigate = useNavigate();
 
     const handleClick = async () => {
         if (loginUserNo == null) {

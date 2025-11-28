@@ -104,7 +104,6 @@ const ComateContent = ({
                     skinTypes={item.skinTypes}
                     isFollowing={item.following}
                     loginUserNo={loginUserNo}
-                    listType="follower"
                     onFollowChange = {(newState) => {
                         updateListState(setFollowerList, index, newState);
                         if (typeof onListFollowChange === "function")
@@ -124,7 +123,6 @@ const ComateContent = ({
                     skinTypes={item.skinTypes}
                     isFollowing={item.following}
                     loginUserNo={loginUserNo}
-                    listType="following"
                     onFollowChange = {(newState) => {
                         updateListState(setFollowingList, index, newState);
                         if (typeof onListFollowChange === "function")
