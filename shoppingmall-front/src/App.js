@@ -38,11 +38,13 @@ import PaymentPage from './pages/PaymentPage/PaymentPage';
 import OrderSuccessPage from './pages/OrderSuccessPage/OrderSuccessPage';
 import OrderFailPage from './pages/OrderFailPage/OrderFailPage';
 import { OrderProvider } from './pages/OrderContext';
+import TermsPage from './pages/TermsPage';
 
 function App() {
   const location = useLocation();
   const hideHeaderFooter = ['/login', '/login/naver/callback', '/signup/terms', '/signup/info', '/find-account', '/kakao/additional-info'].includes(location.pathname) 
     || location.pathname.startsWith('/admin');
+
 
   return (
     <ThemeProvider theme={theme}>
@@ -100,6 +102,8 @@ function App() {
           {/* 상품 관련 */}
           <Route path="/product" element={<ProductListPage />} />
           <Route path="/products/:productId" element={<ProductDetailPage />} />
+          {/* 약관 관련 */}
+          <Route path="/terms/:type" element={<TermsPage />} />
         </Routes>
         {!hideHeaderFooter && <Footer />}
       </div>
@@ -107,5 +111,6 @@ function App() {
     </ThemeProvider>
   ); 
 }   
+
 
 export default App;
