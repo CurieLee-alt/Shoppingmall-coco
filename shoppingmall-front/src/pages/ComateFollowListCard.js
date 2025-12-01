@@ -1,27 +1,26 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-
 import '../css/ComateFollowListCard.css';
-import sampleImg_profile from '../images/sampleImg_profile.png'; // 임시 프로필 이미지
+import sampleImg_profile from '../images/sampleImg_profile.png';
 import { follow, unfollow } from '../utils/comate_api';
 
 const ComateFollowListCard = ({ 
+    loginUserNo,
     memNo, 
     nickname,
     skinTags, 
+    matchingRate,
     isFollowing, 
-    loginUserNo, 
     onFollowChange 
 }) => {
-    const isMine = loginUserNo === memNo; // 로그인 유저(본인) 프로필인 경우 팔로우 버튼 숨김
+    const isMine = loginUserNo === memNo;
     const [followingState, setFollowingState] = useState(isFollowing || false);
 
     const handleClick = async () => {
-        if (loginUserNo == null) {
+        if (!loginUserNo) {
             alert('로그인이 필요한 기능입니다.');
             return;
         }
-
         try {
             if (followingState) {
                 await unfollow(memNo);
@@ -38,30 +37,45 @@ const ComateFollowListCard = ({
         }
     }
 
+    const getMatchClass = (matchingRate) => {
+        if (matchingRate >= 80) return "high";
+        if (matchingRate >= 50) return "medium";
+        return "low";
+    };
+
     return (
         <div className="uc_wrapper">
-            <Link to={`/comate/user/${memNo}/review`}>
-            <div className="uc_info_wrapper">
-                <img src={sampleImg_profile} alt={nickname} className="profile_img"/>
-                <div className="uc_info">
-                    <div className="nickname">{nickname}</div>
-                    <div className="skin_types follow_list">
-                        {skinTags?.map((type, index) => (
-                            <span key={index}>{type}</span>
-                        ))}
+            {/* 좌측 정보만 클릭 가능하도록 Link에 flex:1 */}
+            <Link to={`/comate/user/${memNo}/review`} className="uc_info_wrapper">
+                <div className="left">
+                    <img src={sampleImg_profile} alt={nickname} className="profile_img"/>
+                    <div className="uc_info">
+                        <div className="nickname">{nickname}</div>
+                        <div className="skin_types follow_list">
+                            {skinTags?.map((type, index) => (
+                                <span key={index}>{type}</span>
+                            ))}
+                        </div>
                     </div>
                 </div>
-            </div>
+                <div className="right">
+                    <div className={`matching_rate list ${getMatchClass(matchingRate)}`}>
+                        {matchingRate}<span className="percent">%</span>
+                    </div>
+                </div>
             </Link>
+
+            {/* 버튼은 Link 밖, 항상 오른쪽 끝 */}
             {!isMine && (
                 <button 
                     onClick={handleClick}
                     className={`uc_follow_btn ${followingState ? "active" : ""}`}
                 >
                     {followingState ? "팔로잉" : "팔로우"}
-            </button>)}
+                </button>
+            )}
         </div>
-    );   
+    );
 }
 
 export default ComateFollowListCard;

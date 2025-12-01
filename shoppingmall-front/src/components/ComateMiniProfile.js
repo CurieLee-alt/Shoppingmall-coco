@@ -31,7 +31,7 @@ const ComateMiniProfile = ({
                         <span key={index}>{type}</span>
                     ))}
                 </div>
-                <div className={`matching_rate mini ${getMatchClass(matchingRate)}`}>
+                <div className={`matching_rate ${getMatchClass(matchingRate)}`}>
                     {matchingRate}<span className="percent">%</span>
                 </div>
             </div>

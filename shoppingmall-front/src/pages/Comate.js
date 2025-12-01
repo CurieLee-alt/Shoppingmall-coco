@@ -246,6 +246,7 @@ const Comate = () => {
 
     return (
         <div className="comate_wrapper">
+            {/* 사용자 검색창 */}
             <div className="comate_top">
                 <div className="comate_search_container">
                     <form onSubmit={(e) => e.preventDefault()}>
@@ -279,33 +280,37 @@ const Comate = () => {
                 </div>
             </div>
             <div className="comate_main">
+                {/* 사용자 프로필 */}
                 <ComateFullProfile
                     nickname={member.memNickname}
                     skinTags={member.skinTags}
                     likes={member.likedCount || 0}
                     followers={member.followerCount || 0}
                     following={member.followingCount || 0}
-                    onFollowClick={handleFollowClick}
-                    onTabClick={handleTabClick}
                     isMine = {isMine}
                     isFollowing={following}
                     matchingRate={member.matchingRate}
+
+                    onFollowClick={handleFollowClick}
+                    onTabClick={handleTabClick}
                 />
+                {/* 탭 별 컨텐츠 */}
                 <ComateContent 
                     activeTab={activeTab}
+
+                    loginUserNo={loginUser?.memNo}
+                    targetMemNo={targetMemNo}
+                    
                     reviewList={reviewList}
                     likeList={likeList}
                     followerList={followerList}
                     followingList={followingList}
-                    loginUserNo={loginUser?.memNo}
 
                     setReviewList={setReviewList}
                     setLikeList={setLikeList}
                     setFollowerList={setFollowerList}
                     setFollowingList={setFollowingList}
 
-                    targetMemNo={targetMemNo}
-                    
                     onLikeChange={(liked) => {
                         // 다른 사람의 프로필인 경우 좋아요 상태변화 개수 반영하지 않음
                         if (targetMemNo !== loginUser?.memNo) return;
@@ -321,7 +326,6 @@ const Comate = () => {
                         });
                     }}
                     
-
                     onListFollowChange={(type, newState) => {
                         // 리스트에서 팔로우/언팔로우 클릭-> Full Profile count 반영
                         // targetMember !== loginMember -> count 상태 변경 금지

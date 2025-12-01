@@ -3,8 +3,26 @@ import React from "react";
 import '../css/ComateProfile.css';
 import sampleImg_profile from '../images/sampleImg_profile.png'; // 임시 프로필 이미지
 
-const ComateFullProfile = ({ nickname, skinTags, likes, followers, following, 
-                            onFollowClick, onClick, isMine, isFollowing, onTabClick }) => {
+const ComateFullProfile = ({ 
+    nickname, 
+    skinTags, 
+    likes, 
+    followers, 
+    following, 
+    onFollowClick, 
+    onClick, 
+    isMine, 
+    isFollowing,
+    matchingRate,
+    onTabClick 
+}) => {
+
+    const getMatchClass = (matchingRate) => {
+        if (80 <= matchingRate) return "high";
+        if (50 <= matchingRate) return "medium";
+        return "low";
+    };
+
     return (
         <div className="comate_card_wrapper" onClick={onClick}>
             <div className="comate_card full">
@@ -18,6 +36,12 @@ const ComateFullProfile = ({ nickname, skinTags, likes, followers, following,
                     ))}
                 </div>
             </div>
+            {/* 내 프로필이면 매칭률 숨기기 */}
+            {!isMine && (
+                <div className={`matching_rate mini ${getMatchClass(matchingRate)}`}>
+                    {matchingRate}<span className="percent">%</span>
+                </div>
+            )}
             <div className="stats_section full">
                 <div className="stat_item full"
                 onClick={(e) => { e.stopPropagation(); onTabClick('like'); }}>
