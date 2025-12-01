@@ -60,7 +60,7 @@ const ComateFollowListCard = ({
                 </div>
                 <div className="right">
                     <div className={`matching_rate list ${getMatchClass(matchingRate)}`}>
-                        {matchingRate}<span className="percent">%</span>
+                        {matchingRate === -1 ? '??' : matchingRate}<span className="percent">%</span>
                     </div>
                 </div>
             </Link>

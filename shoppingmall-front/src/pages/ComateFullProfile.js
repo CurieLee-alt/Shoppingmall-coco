@@ -39,7 +39,7 @@ const ComateFullProfile = ({
             {/* 내 프로필이면 매칭률 숨기기 */}
             {!isMine && (
                 <div className={`matching_rate mini ${getMatchClass(matchingRate)}`}>
-                    {matchingRate}<span className="percent">%</span>
+                    {matchingRate === -1 ? '??' : matchingRate}<span className="percent">%</span>
                 </div>
             )}
             <div className="stats_section full">

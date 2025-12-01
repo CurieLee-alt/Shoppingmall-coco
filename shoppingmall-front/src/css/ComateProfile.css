@@ -136,6 +136,8 @@
     font-weight: 800;
     font-size: 24px;
     margin-bottom: 20px;
+    display: inline-flex;
+    align-items: baseline;
 }
 .matching_rate .percent {
     font-size: 15px;
