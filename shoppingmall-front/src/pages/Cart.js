@@ -167,7 +167,7 @@ function Cart() {
     navigate("/order", {
       state: {
         orderItems: selectedCartItems,
-        orderSubtotal: subtotal,
+        orderSubtotal: selectedTotalPrice,
         shippingFee: shippingFee,
       },
     });
