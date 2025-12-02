@@ -5,6 +5,7 @@ import '../css/Comate.css';
 import sampleImg_profile from '../images/sampleImg_profile.png';
 
 import ComateFullProfile from './ComateFullProfile';
+import ComateRecommend from './ComateRecommend';
 import ComateContent from './ComateContent';
 import { 
     getProfile,
@@ -201,10 +202,7 @@ const Comate = () => {
     /* URL 파라미터 탭 변경 감지 */
     useEffect(() => {
         if (tab && tab !== activeTab) setActiveTab(tab);
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
+        window.scrollTo({ top: 0, behavior: 'smooth'});
     }, [tab]);
 
     /* 탭 클릭 */
@@ -297,6 +295,9 @@ const Comate = () => {
                     onTabClick={handleTabClick}
                 />
                 {/* 탭 별 컨텐츠 */}
+                { activeTab === 'recommend' ? (
+                    <ComateRecommend loginUserNo={loginUser?.memNo} />
+                ) : (
                 <ComateContent 
                     activeTab={activeTab}
 
@@ -346,6 +347,7 @@ const Comate = () => {
                         });
                     }}
                 />
+                )}
             </div>
         </div>
     );   
