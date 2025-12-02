@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../css/NoticePage.css'; // 아래 CSS 파일 생성 필요
+import '../css/NoticePage.css';
 
 // 공지사항 정적 데이터
 const NOTICE_DATA = [
