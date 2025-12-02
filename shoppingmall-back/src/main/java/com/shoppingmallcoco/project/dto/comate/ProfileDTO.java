@@ -19,6 +19,8 @@ public class ProfileDTO {
     @Builder.Default
     private List<String> skinTags = new ArrayList<>();
     
+    // 작성한 리뷰 개수
+    private int reviewCount;
     // 좋아요 누른 리뷰 개수
     private int likedCount;
     

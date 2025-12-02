@@ -52,6 +52,7 @@ public class ComateService {
     	
     	boolean isMine = currentMemNo != null && currentMemNo.equals(targetMemNo);
 
+    	int reviewCount = reviewRepository.countByOrderItem_Order_Member_MemNo(targetMemNo);
     	int likedCount = likeRepository.countByMember_MemNo(targetMemNo);
         int followerCount = followRepository.countByFollowing_MemNo(targetMemNo);
         int followingCount = followRepository.countByFollower_MemNo(targetMemNo);
@@ -69,6 +70,7 @@ public class ComateService {
                 .memName(member.getMemName())
                 .memNickname(member.getMemNickname())
                 .skinTags(skinTags)
+                .reviewCount(reviewCount)
                 .likedCount(likedCount)
                 .followerCount(followerCount)
                 .followingCount(followingCount)

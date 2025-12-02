@@ -27,7 +27,7 @@ const Comate = () => {
     const [targetMemNo, setTargetMemNo] = useState(null);
     const [userType, setUserType] = useState('user');
 
-    const [activeTab, setActiveTab] = useState(tab ||  'review');
+    const [activeTab, setActiveTab] = useState(tab ||  'recommend');
     const [member, setMember] = useState(null);
     const [following, setFollowing] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -48,16 +48,16 @@ const Comate = () => {
     useEffect(() => {
         const initUser = async () => {
             try {
-                const current = await getCurrentMember();
-                setLoginUser(current);
+                const loginUser = await getCurrentMember();
+                setLoginUser(loginUser);
 
                 // 사용자 본인이 로그인 한 경우
-                if (!memNo || memNo === current.memNo.toString()) {
+                if (!memNo || memNo === loginUser.memNo.toString()) {
                     if (window.location.pathname !== `/comate/me/`) {
-                        navigate('/comate/me/review', {replace: true});
+                        navigate('/comate/me', {replace: true});
                     }
                     setUserType('me');
-                    setTargetMemNo(current.memNo);
+                    setTargetMemNo(loginUser.memNo);
                 } else {
                     // 타 사용자 프로필 조회 or 로그인 하지 않은 사용자 
                     setUserType('user');
@@ -68,7 +68,7 @@ const Comate = () => {
 
                 // 비로그인-> userType='user' targetMemNo 는 URL 에서 가져옴
                 setLoginUser(null);
-                setUserType("user");
+                setUserType("guest");
                 setTargetMemNo(memNo);
             }
         }
@@ -86,6 +86,7 @@ const Comate = () => {
                 const data = await getProfile(targetMemNo);
                 setMember(data);
                 setFollowing(data.following);
+                console.log(data);
             } catch (error) {
                 console.error(error);
                 alert("회원 정보를 불러오는 중 오류가 발생했습니다. ");
@@ -284,6 +285,7 @@ const Comate = () => {
                 <ComateFullProfile
                     nickname={member.memNickname}
                     skinTags={member.skinTags}
+                    reviews={member.reviewCount}
                     likes={member.likedCount || 0}
                     followers={member.followerCount || 0}
                     following={member.followingCount || 0}

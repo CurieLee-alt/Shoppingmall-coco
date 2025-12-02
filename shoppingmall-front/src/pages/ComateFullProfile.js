@@ -6,6 +6,7 @@ import sampleImg_profile from '../images/sampleImg_profile.png'; // 임시 프�
 const ComateFullProfile = ({ 
     nickname, 
     skinTags, 
+    reviews,
     likes, 
     followers, 
     following, 
@@ -47,6 +48,11 @@ const ComateFullProfile = ({
                 </div>
             )}
             <div className="stats_section full">
+                <div className="stat_item full"
+                onClick={(e) => { e.stopPropagation(); onTabClick('review'); }}>
+                    <div className="stat_value full">{reviews}</div>
+                    <div className="stat_label full">리뷰</div>
+                </div>
                 <div className="stat_item full"
                 onClick={(e) => { e.stopPropagation(); onTabClick('like'); }}>
                     <div className="stat_value full">{likes}</div>
