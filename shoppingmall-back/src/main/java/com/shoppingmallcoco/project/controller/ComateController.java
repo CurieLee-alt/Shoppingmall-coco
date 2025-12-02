@@ -26,6 +26,7 @@ import com.shoppingmallcoco.project.dto.comate.MiniProfileDTO;
 import com.shoppingmallcoco.project.dto.comate.MyReviewDTO;
 import com.shoppingmallcoco.project.dto.comate.ProfileDTO;
 import com.shoppingmallcoco.project.dto.comate.RecommendPrdDTO;
+import com.shoppingmallcoco.project.dto.comate.RecommendResponseDTO;
 import com.shoppingmallcoco.project.entity.auth.Member;
 import com.shoppingmallcoco.project.repository.auth.MemberRepository;
 import com.shoppingmallcoco.project.service.auth.MemberService;
@@ -173,8 +174,9 @@ public class ComateController {
     
     // 추천 상품 조회
     @GetMapping("/recommend")
-    public List<RecommendPrdDTO> getRecommendation(HttpServletRequest request) {
-    	Long currentMemNo = getCurrentMemNo(request);
-    	return recommendationService.recommendProduct(currentMemNo);
+    public RecommendResponseDTO getRecommendation(HttpServletRequest request) {
+    	Long loginUserNo = getCurrentMemNo(request);
+    	
+    	return recommendationService.recommendAll(loginUserNo);
     }
 }
