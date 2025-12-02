@@ -38,8 +38,8 @@ const ComateFollowListCard = ({
     }
 
     const getMatchClass = (matchingRate) => {
-        if (matchingRate >= 80) return "high";
-        if (matchingRate >= 50) return "medium";
+        if (70 <= matchingRate) return "high";
+        if (40 <= matchingRate) return "medium";
         return "low";
     };
 

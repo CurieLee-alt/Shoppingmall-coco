@@ -16,8 +16,8 @@ const ComateMiniProfile = ({
 }) => {
     
     const getMatchClass = (matchingRate) => {
-        if (80 <= matchingRate) return "high";
-        if (50 <= matchingRate) return "medium";
+        if (70 <= matchingRate) return "high";
+        if (40 <= matchingRate) return "medium";
         return "low";
     };
     
