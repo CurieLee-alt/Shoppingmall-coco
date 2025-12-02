@@ -173,7 +173,8 @@ public class ComateController {
     
     // 추천 상품 조회
     @GetMapping("/recommend")
-    public List<RecommendPrdDTO> getRecommendation(@RequestParam("memNo") Long memNo) {
-    	return recommendationService.recommendProduct(memNo);
+    public List<RecommendPrdDTO> getRecommendation(HttpServletRequest request) {
+    	Long currentMemNo = getCurrentMemNo(request);
+    	return recommendationService.recommendProduct(currentMemNo);
     }
 }

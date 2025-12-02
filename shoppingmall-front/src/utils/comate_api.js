@@ -89,7 +89,9 @@ export const unfollow = async (targetMemNo) => {
 
 /* 리뷰 좋아요 토글 */
 export const toggleLike = async (reviewNo) => {
-    const response = await fetchWithAuth(`/reviews/${reviewNo}/like`, {method: 'POST'});
+    const response = await fetchWithAuth(`/reviews/${reviewNo}/like`, {
+        method: "POST"
+    });
     if (!response.ok) throw new Error('좋아요 처리 실패');
     const result = await response.json();
     return result === 1;
@@ -99,10 +101,20 @@ export const toggleLike = async (reviewNo) => {
 export const searchMembers = async (nickname, options = {}) => {
     const encodedNickname = encodeURIComponent(nickname);
     const response = await fetchWithAuth(
-        `/comate/users/search?nickname=${encodedNickname}`,
+        `${API_BASE_URL}/users/search?nickname=${encodedNickname}`,
         { signal: options.signal }
     );
     
     if (!response.ok) throw new Error('검색 실패');
     return response.json();
 };
+
+/* 추천 상품/리뷰/유저 조회 */
+export const getRecommendation = async () => {
+    const response = await fetchWithAuth(`${API_BASE_URL}/recommend`, {
+        method: "GET"
+    });
+
+    if (!response.ok) throw new Error("추천 조회 실패");
+    return response.json();
+}
