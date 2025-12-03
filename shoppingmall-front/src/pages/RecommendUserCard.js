@@ -27,7 +27,7 @@ const RecommendUserCard = ({
                         {matchingRate}
                         <span className="percent">%</span>
                     </div>
-                    </div>
+                </div>
             </div>
         </Link>
         </div>

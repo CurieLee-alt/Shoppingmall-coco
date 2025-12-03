@@ -64,7 +64,7 @@ const ComateRecommend = ({ loginUserNo }) => {
             <section>
                 <div>
                     <div className="recommend_title">이런 상품은 어떠세요?</div>
-                    <div className="recommend_sub">팔로우하는 CO-MATE 가 구매한 상품이에요</div>
+                    <div className="recommend_sub"></div>
                 </div>
                 <div className="recommend_grid_4">
                 {recommendData?.products?.map((product) => (
