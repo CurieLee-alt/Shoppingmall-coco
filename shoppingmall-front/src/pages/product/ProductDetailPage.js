@@ -39,11 +39,10 @@ function ProductDetailPage() {
         const response = await axios.get(`http://localhost:8080/api/products/${productId}`);
         const data = response.data;
 
-        // 판매 중지 상품 접근 차단 로직
+        // 판매 중지 상품 접근 차단 로직 -> 에러 페이지로 이동
         if (data.status === 'STOP' || data.status === '판매중지') {
-            alert("판매가 중지된 상품입니다.");
-            navigate('/product', { replace: true }); // 상품 목록으로 이동
-            return; // 이후 로직 실행 중단
+            navigate('/product-stopped', { replace: true }); // 에러 페이지로 이동
+            return;
         }
 
         setProduct(data);
