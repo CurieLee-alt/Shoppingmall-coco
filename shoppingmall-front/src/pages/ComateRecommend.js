@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import '../css/RecommendCard.css';
 
 import RecommendUserCard from './RecommendUserCard';
+import RecommendReviewCard from './RecommendReviewCard';
 import RecommendPrdCard from './RecommendPrdCard';
 import { getRecommendation } from '../utils/comate_api';
 
@@ -49,16 +50,15 @@ const ComateRecommend = ({ loginUserNo }) => {
                     <div className="recommend_sub">이 리뷰, 당신에게 도움이 될 거예요</div>
                 </div>
                 <div>
-                {/*
+                
                 {recommendData?.reviews?.map((review, index) => (
-                    <ComateReviewCard
-                    key={`${review.reviewNo}-${index}`}
+                    <RecommendReviewCard
+                    key={review.reviewNo}
                         {...review}
                         loginUserNo={loginUserNo}
-                        // onToggleLike={handleReviewLikeToggle}
                     />
                 ))}
-                */}
+                
                 </div>
             </section>
             <section>

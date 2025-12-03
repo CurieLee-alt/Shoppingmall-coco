@@ -87,7 +87,6 @@ const Comate = () => {
                 const data = await getProfile(targetMemNo);
                 setMember(data);
                 setFollowing(data.following);
-                console.log(data);
             } catch (error) {
                 console.error(error);
                 alert("회원 정보를 불러오는 중 오류가 발생했습니다. ");
