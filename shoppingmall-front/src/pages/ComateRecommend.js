@@ -32,11 +32,10 @@ const ComateRecommend = ({ loginUserNo }) => {
 
     return (
         <div className="recommend_wrapper">
-            COCO 만의 알고리즘을 활용해 사용자에게 꼭 맞는 추천 시스템을 제공합니다.
             <section>
                 <div>
                     <div className="recommend_title">추천 CO-MATE</div>
-                    <div className="recommend_sub">CO-MATE 를 팔로우</div>
+                    <div className="recommend_sub">CO-MATE 를 팔로우하고 맞춤 서비스를 받아보세요</div>
                 </div>
                 <div className="recommend_grid_4">
                 {recommendData?.users?.map((user) => (
