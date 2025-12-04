@@ -41,6 +41,9 @@ import { OrderProvider } from './pages/OrderContext';
 import TermsPage from './pages/TermsPage';
 import NotFound from './pages/error/NotFound';
 import Forbidden from './pages/error/Forbidden';
+import NoticePage from './pages/NoticePage';
+import EventPage from './pages/EventPage';
+import ProductStopped from './pages/error/ProductStopped';
 
 function App() {
   const location = useLocation();
@@ -109,9 +112,16 @@ function App() {
 
           {/* 에러 페이지 라우트 */}
           <Route path="/error/403" element={<Forbidden />} />
+          <Route path="/product-stopped" element={<ProductStopped />} />
 
           {/* 404 에러 페이지 라우트 */}
           <Route path="*" element={<NotFound />} />
+
+          {/* footer 공지사항 라우트 */}
+          <Route path="/notices" element={<NoticePage />} />
+
+          {/* header 이벤트 라우트 */}
+          <Route path="/event" element={<EventPage />} />
 
         </Routes>
         {!hideHeaderFooter && <Footer />}
