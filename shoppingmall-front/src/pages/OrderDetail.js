@@ -9,14 +9,7 @@ function OrderDetail() {
 
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
-
-    const statusMap = {
-    배송완료: "배송완료",
-    배송중: "배송중",
-    상품준비중: "상품준비중",
-    취소됨: "취소됨",
-  };
-
+  
   const token = localStorage.getItem("token");
   useEffect(() => {
 
