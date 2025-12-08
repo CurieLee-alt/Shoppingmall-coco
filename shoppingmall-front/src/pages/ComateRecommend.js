@@ -14,10 +14,6 @@ const ComateRecommend = ({ loginUserNo }) => {
     const [recommendData, setRecommendData] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    const hasFallbackUser = recommendData?.users?.some(
-        (user) => user.matchingRate === null
-    );
-
     useEffect(() => {
         const loadRecommend = async () => {
             try {
