@@ -58,7 +58,7 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
     @Query(value = """
             SELECT *
             FROM member
-            WHERE mem_no <> :loginUserNo
+            WHERE memNo <> :loginUserNo
             ORDER BY DBMS_RANDOM.VALUE
             FETCH FIRST 10 ROWS ONLY
             """,
