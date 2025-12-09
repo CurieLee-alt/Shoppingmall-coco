@@ -13,20 +13,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // 이미지 파일 경로 설정
+        // 이미지 파일 경로 설정 (업로드된 파일 서빙)
         registry.addResourceHandler("/images/**") // 웹 접근 경로
             .addResourceLocations("file:///" + uploadDir);
-
-        // React 빌드 파일 서빙 설정 (정적 리소스)
-        registry.addResourceHandler("/static/**")
-            .addResourceLocations("classpath:/static/static/");
-        
-        // React 빌드 파일의 루트 리소스 (favicon, manifest 등)
-        registry.addResourceHandler("/favicon.ico", "/manifest.json", "/logo*.png", "/robots.txt", "/asset-manifest.json", "/prd_placeholder.png")
-            .addResourceLocations("classpath:/static/");
-        
-        // index.html 직접 접근
-        registry.addResourceHandler("/index.html")
-            .addResourceLocations("classpath:/static/index.html");
     }
 }
