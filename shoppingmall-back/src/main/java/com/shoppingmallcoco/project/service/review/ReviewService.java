@@ -76,7 +76,9 @@ public class ReviewService implements IReviewService {
         // 업로드한 파일 MultipartFile 객체에 하나씩 담기, 파일 upload, entity로 변환, 리뷰이미지에 save
         if (files != null && !files.isEmpty()) {
             for (MultipartFile file : files) {
-                String imageUrl = fileUploadService.upload(file);
+                String storedFileName = fileUploadService.upload(file);
+
+                String imageUrl = "/images/" + storedFileName;
 
                 ReviewImage reviewImage = ReviewImage.toEntity(imageUrl, review);
 
@@ -328,8 +330,8 @@ public class ReviewService implements IReviewService {
     // Review 페이징
     @Transactional(readOnly = true)
     public Page<ReviewDTO> getReviewPage(Long productNo, Long memNo, int page, int size,
-        String filterType) {
-        Sort sort = switch (filterType) {
+        String sortType,  Boolean coMate) {
+        Sort sort = switch (sortType) {
             case "oldest" -> Sort.by(Sort.Direction.ASC, "createdAt");
             default -> Sort.by(Sort.Direction.DESC, "createdAt");
         };
@@ -338,7 +340,7 @@ public class ReviewService implements IReviewService {
 
         Page<Review> reviewPage;
 
-        if ("co-mate".equals(filterType)) {
+        if (Boolean.TRUE.equals(coMate)) {
             SkinProfile skin = skinRepository.findByMember_MemNo(memNo)
                 .orElseThrow(() -> new IllegalArgumentException("피부 타입 설정이 되지 않았습니다."));
 
