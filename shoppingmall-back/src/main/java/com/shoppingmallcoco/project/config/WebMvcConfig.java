@@ -2,13 +2,8 @@ package com.shoppingmallcoco.project.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.resource.PathResourceResolver;
-
-import java.io.IOException;
 
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
@@ -22,28 +17,16 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/images/**") // 웹 접근 경로
             .addResourceLocations("file:///" + uploadDir);
 
-        // React 빌드 파일 서빙 설정
-        registry.addResourceHandler("/**")
-            .addResourceLocations("classpath:/static/")
-            .resourceChain(true)
-            .addResolver(new PathResourceResolver() {
-                @Override
-                protected Resource getResource(String resourcePath, Resource location) throws IOException {
-                    Resource requestedResource = location.createRelative(resourcePath);
-                    
-                    // 요청된 리소스가 존재하고 파일인 경우 반환
-                    if (requestedResource.exists() && requestedResource.isReadable()) {
-                        return requestedResource;
-                    }
-                    
-                    // API 경로는 제외 (실제 API 요청인 경우)
-                    if (resourcePath.startsWith("api/")) {
-                        return null;
-                    }
-                    
-                    // 그 외 모든 경로는 index.html로 fallback (SPA 라우팅 지원)
-                    return new ClassPathResource("/static/index.html");
-                }
-            });
+        // React 빌드 파일 서빙 설정 (정적 리소스)
+        registry.addResourceHandler("/static/**")
+            .addResourceLocations("classpath:/static/static/");
+        
+        // React 빌드 파일의 루트 리소스 (favicon, manifest 등)
+        registry.addResourceHandler("/favicon.ico", "/manifest.json", "/logo*.png", "/robots.txt", "/asset-manifest.json", "/prd_placeholder.png")
+            .addResourceLocations("classpath:/static/");
+        
+        // index.html 직접 접근
+        registry.addResourceHandler("/index.html")
+            .addResourceLocations("classpath:/static/index.html");
     }
 }
