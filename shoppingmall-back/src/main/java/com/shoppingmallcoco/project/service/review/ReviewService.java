@@ -121,15 +121,6 @@ public class ReviewService implements IReviewService {
 
         findReview.update(reviewDTO.getRating(), reviewDTO.getContent());
 
-        List<ReviewImage> findImage = reviewImageRepository.findByReview(findReview);
-
-        if (findImage != null && !findImage.isEmpty()) {
-            for (ReviewImage image : findImage) {
-                fileUploadService.delete(image.getImageUrl());
-            }
-        }
-        reviewImageRepository.deleteByReview(findReview);
-
         if (files != null && !files.isEmpty()) {
             for (MultipartFile file : files) {
                 String storedFileName = fileUploadService.upload(file);
