@@ -243,7 +243,7 @@ function PaymentPage() {
               className={`method-option ${paymentMethod === 'api' ? 'selected' : ''}`}
               onClick={() => setPaymentMethod('api')}
             >
-              <span className="radio-icon"></span> API 간편결제 (포트원/토스 등)
+              <span className="radio-icon"></span> API 간편결제 (포트원)
             </div>
             {/* 신용/체크카드 직접 입력 선택 옵션 */}
             <div 

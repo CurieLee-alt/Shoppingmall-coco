@@ -168,7 +168,7 @@ public class OrderService {
         }
 
         if (!"PAID".equals(order.getStatus())) {
-            throw new RuntimeException("현재 상태[" + order.getStatus() + "]는 취소할 수 없습니다. (PAID 또는 PENDING 상태에서만 가능)");
+            throw new RuntimeException("현재 상태[" + order.getStatus() + "]는 취소할 수 없습니다. (PAID 상태에서만 가능)");
         }
 
         for (OrderItem item : order.getOrderItems()) {
