@@ -53,8 +53,8 @@ const RecommendReviewCard = ({
                         {reviewImages.map((img) => (
                             <img
                                 key={img.reviewImageNo}
-                                src={img.imageUrl}
-                                alt="review"
+                                src={`http://13.231.28.89:18080${img.imageUrl}`}
+                                alt="리뷰 이미지"
                                 className="review_img"
                             />
                         ))}
