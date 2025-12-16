@@ -270,6 +270,14 @@ public class RecommendationService {
     
     /* 팔로우하지 않은 유저 추천 */
     private List<RecommendUserDTO> recommendUser(Long loginUserNo) {
+    	
+    	boolean hasSkinProfile = skinRepository.findByMember_MemNo(loginUserNo).isPresent();
+    	
+    	// 피부 프로필을 등록하지 않은 경우-> 매칭률 없는 fallback
+    	if (!hasSkinProfile) {
+    		return fallbackUsersWithoutMatch();
+    	}
+    	
         List<Member> nonFollowedUsers = followRepository.findNonFollowedMemNo(loginUserNo);
         
         List<Member> highMatch = nonFollowedUsers.stream()
@@ -288,7 +296,7 @@ public class RecommendationService {
         candidates.addAll(mediumMatch);
         Collections.shuffle(candidates);
         
-        if (candidates.size() < RANDOM_USER)	return fallbackUsers();
+        if (candidates.size() < RANDOM_USER)	return fallbackUsersWithMatch(loginUserNo);
         
         return candidates.stream()
                 .limit(RANDOM_USER)
@@ -299,8 +307,35 @@ public class RecommendationService {
                 .collect(Collectors.toList());
     }
     
+    /* 유저 추천 fallback - 피부 프로필 등록 안한 경우 */
+    private List<RecommendUserDTO> fallbackUsersWithoutMatch() {
+    	LinkedHashSet<Member> merged = getFallbackBaseUsers();
+    	
+    	return merged.stream()
+    			.limit(RANDOM_USER)
+    			.map(m -> new RecommendUserDTO(
+    					m.getMemNo(),
+    					m.getMemNickname(),
+    					null))
+    			.toList();
+    }
+    
+    /* 유저 추천 fallback - 피부 프로필 등록한 경우 */
+    private List<RecommendUserDTO> fallbackUsersWithMatch(Long loginUserNo) {
+    	LinkedHashSet<Member> merged = getFallbackBaseUsers();
+    	
+    	return merged.stream()
+    			.limit(RANDOM_USER)
+    			.map(m -> new RecommendUserDTO(
+    					m.getMemNo(),
+    					m.getMemNickname(),
+    					matchingService.getUserMatch(loginUserNo, m.getMemNo())
+    			))
+    			.toList();
+    }
+    
     /* 유저 추천 fallback */
-    private List<RecommendUserDTO> fallbackUsers() {
+    private LinkedHashSet<Member> getFallbackBaseUsers() {
     	
     	// 1 리뷰 작성 개수가 많은 유저
     	List<Member> reviewRank = memberRepository.findUsersOrderByReviewCount(PageRequest.of(0, 5));
@@ -314,14 +349,7 @@ public class RecommendationService {
     	merged.addAll(followerRank);
     	merged.addAll(recentJoin);
     	
-    	return merged.stream()
-    			.limit(RANDOM_USER)
-    			.map(member -> new RecommendUserDTO(
-    					member.getMemNo(),
-    					member.getMemNickname(),
-    					null
-    			))
-    			.toList();
+    	return merged;
     }
     
     /* 상품 썸네일 가져오기 */
