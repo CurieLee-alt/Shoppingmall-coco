@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.shoppingmallcoco.project.dto.review.ReviewImageDTO;
 
 import lombok.*;
 
@@ -30,6 +31,8 @@ public class RecommendReviewDTO {
     
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime createdAt;
+    
+    private List<ReviewImageDTO> reviewImages;
     
     private boolean likedByLoginUser;
     private int likeCount;

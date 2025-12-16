@@ -16,6 +16,7 @@ import com.shoppingmallcoco.project.dto.comate.RecommendPrdDTO;
 import com.shoppingmallcoco.project.dto.comate.RecommendResponseDTO;
 import com.shoppingmallcoco.project.dto.comate.RecommendReviewDTO;
 import com.shoppingmallcoco.project.dto.comate.RecommendUserDTO;
+import com.shoppingmallcoco.project.dto.review.ReviewImageDTO;
 import com.shoppingmallcoco.project.entity.auth.Member;
 import com.shoppingmallcoco.project.entity.product.ProductEntity;
 import com.shoppingmallcoco.project.entity.product.ProductImageEntity;
@@ -247,6 +248,10 @@ public class RecommendationService {
             int likeCount = likeRepository.countByReview_ReviewNo(r.getReviewNo());
             boolean likedByLoginUser = likeRepository.existsByMember_MemNoAndReview_ReviewNo(loginUserNo, r.getReviewNo());
         
+            List<ReviewImageDTO> reviewImages = r.getReviewImages().stream()
+            										.map(ReviewImageDTO::toDTO)
+            										.toList();
+            
             if (!exists) {
                 result.add(RecommendReviewDTO.builder()
                         .reviewNo(r.getReviewNo())
@@ -257,6 +262,7 @@ public class RecommendationService {
                         .authorNickname(r.getOrderItem().getOrder().getMember().getMemNickname())
                         .rating(r.getRating())
                         .tags(tags)
+                        .reviewImages(reviewImages)
                         .likedByLoginUser(likedByLoginUser)
                         .likeCount(likeCount)
                         .content(r.getContent())

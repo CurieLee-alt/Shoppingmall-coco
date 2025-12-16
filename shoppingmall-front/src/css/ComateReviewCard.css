@@ -85,3 +85,7 @@ a {
     text-decoration: none;
     color: black;
 }
+.review_images img {
+    border-radius: 5px;
+    width: 150px;
+}
