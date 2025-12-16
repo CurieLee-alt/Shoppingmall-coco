@@ -178,19 +178,19 @@ function AdminProductList() {
       <div className="dashboard-container">
         <div className="dash-card">
           <p className="dash-title">전체 상품</p>
-          <p className="dash-value">{dashboardCounts.totalProducts}</p>
+          <p className="dash-value">{dashboardCounts.totalProducts}개</p>
         </div>
         <div className="dash-card">
           <p className="dash-title">판매중</p>
-          <p className="dash-value">{dashboardCounts.inStock}</p>
+          <p className="dash-value">{dashboardCounts.inStock}개</p>
         </div>
         <div className="dash-card">
           <p className="dash-title">품절</p>
-          <p className="dash-value">{dashboardCounts.outOfStock}</p>
+          <p className="dash-value">{dashboardCounts.outOfStock}개</p>
         </div>
         <div className="dash-card">
           <p className="dash-title">총 재고</p>
-          <p className="dash-value">{dashboardCounts.totalStock.toLocaleString()}</p>
+          <p className="dash-value">{dashboardCounts.totalStock}개</p>
         </div>
       </div>
 
